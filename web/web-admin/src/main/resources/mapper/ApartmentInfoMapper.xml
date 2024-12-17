@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.lease.web.admin.mapper.ApartmentInfoMapper">
+
+    <!-- 写的注释     这个查询是根据 ,省市区 查询出 公寓的信息 以及 每个公寓的房间总数和空余房间数
+     查询的顺序先查出来这个省市区的公寓，    然后看这个公寓的空闲房间数和 房间总数
+     1  根据给的条件 先 查询 appartmentinfo 这个表的信息 查公寓
+     2  查询 公寓 查询 这个公寓下的 房间数 和  空闲房间数  room_info(存的是房间总数)   查询房间总数
+     3  查询到房间总数以后       看房间的住的人数     算出来空闲房间数  (查询已经签约的房间数)      查询这个不涉及转换 为什么？ 因为这个只是用了查询 没有用其他的
+          -->
+    <select id="pageItem" resultType="com.atguigu.lease.web.admin.vo.apartment.ApartmentItemVo">
+
+        select
+        aii.id,
+        aii.name,
+        aii.introduction,
+        aii.district_id,
+        aii.district_name,
+        aii.city_id,
+        aii.city_name,
+        aii.province_id,
+        aii.province_name,
+        aii.address_detail,
+        aii.latitude,
+        aii.longitude,
+        aii.phone,
+        aii.is_release,
+        ifnull(tc.cnt,0) total_room_count,
+        ifnull(tc.cnt,0) - ifnull(cc.cnt,0) free_room_count
+        from (select id,
+        name,
+        introduction,
+        district_id,
+        district_name,
+        city_id,
+        city_name,
+        province_id,
+        province_name,
+        address_detail,
+        latitude,
+        longitude,
+        phone,
+        is_release
+        from apartment_info
+        <where>
+            is_deleted=0
+            <if test="queryVo.provinceId != null">
+                and province_id=#{queryVo.provinceId}
+            </if>
+            <if test="queryVo.cityId != null">
+                and city_id=#{queryVo.cityId}
+            </if>
+            <if test="queryVo.districtId != null">
+                and district_id=#{queryVo.districtId}
+            </if>
+        </where>
+        ) aii
+        left join
+        (select apartment_id,
+        count(*) cnt
+        from room_info
+        where is_deleted = 0
+        and is_release = 1
+        group by apartment_id) tc
+        on aii.id = tc.apartment_id
+        left join
+        (select apartment_id,
+        count(*) cnt
+        from lease_agreement
+        where is_deleted = 0
+        and status in (2, 5)
+        group by apartment_id) cc
+        on aii.id = cc.apartment_id
+
+    </select>
+</mapper>
