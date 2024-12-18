@@ -20,14 +20,14 @@ public class Result<T> {
     public Result() {
     }
 
-    private static <T> Result<T> build(T data) {
-        Result<T> result = new Result<>();
+    private static <T> Result<T> build(T data) {             // 单个的构造含糊
+        Result<T> result = new Result<>();            //空构造函数
         if (data != null)
             result.setData(data);
         return result;
     }
 
-    public static <T> Result<T> build(T body, ResultCodeEnum resultCodeEnum) {
+    public static <T> Result<T> build(T body, ResultCodeEnum resultCodeEnum) {          //多个构造函数
         Result<T> result = build(body);
         result.setCode(resultCodeEnum.getCode());
         result.setMessage(resultCodeEnum.getMessage());
@@ -45,5 +45,12 @@ public class Result<T> {
 
     public static <T> Result<T> fail() {
         return build(null, ResultCodeEnum.FAIL);
+    }           //不能用这两个  因为参数已经定义好了，我们要重新定义构造函数
+
+    public static <T> Result<T> fail(Integer code, String message) {
+        Result<T> result = build(null);
+        result.setCode(code);
+        result.setMessage(message);
+        return result;
     }
 }
