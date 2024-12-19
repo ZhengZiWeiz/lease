@@ -3,7 +3,10 @@ package com.atguigu.lease.web.admin.service.impl;
 import com.atguigu.lease.model.entity.*;
 import com.atguigu.lease.web.admin.mapper.*;
 import com.atguigu.lease.web.admin.service.LeaseAgreementService;
+import com.atguigu.lease.web.admin.vo.agreement.AgreementQueryVo;
 import com.atguigu.lease.web.admin.vo.agreement.AgreementVo;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +59,14 @@ public class LeaseAgreementServiceImpl extends ServiceImpl<LeaseAgreementMapper,
         adminAgreementVo.setLeaseTerm(leaseTerm);
         return adminAgreementVo;
     }
+
+    @Override
+    public IPage<AgreementVo> selectPage(Page<AgreementVo> voPage, AgreementQueryVo queryVo) {
+        return  leaseAgreementMapper.selectByQueryVo(voPage,queryVo);
+
+    }
+
+
 }
 
 

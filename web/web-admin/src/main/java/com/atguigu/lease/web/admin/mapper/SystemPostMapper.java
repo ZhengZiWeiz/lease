@@ -1,6 +1,7 @@
 package com.atguigu.lease.web.admin.mapper;
 
 import com.atguigu.lease.model.entity.SystemPost;
+import com.atguigu.lease.model.entity.SystemUser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -11,6 +12,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface SystemPostMapper extends BaseMapper<SystemPost> {
 
+    SystemUser selectOneByUsername(String username);
 }
 
 

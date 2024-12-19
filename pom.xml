@@ -13,7 +13,6 @@
         <module>model</module>
         <module>common</module>
         <module>web</module>
-        <module>test</module>
     </modules>
 
 
@@ -93,6 +92,7 @@
                 <artifactId>minio</artifactId>
                 <version>${minio.version}</version>
             </dependency>
+
 
             <!--阿里云短信客户端，用于发送短信验证码-->
             <!--官方文档：https://help.aliyun.com/document_detail/215759.html?spm=a2c4g.215759.0.0.49f32807f4Yc0y -->
